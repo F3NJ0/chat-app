@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function Chat(props) {
     let { name, color } = props.route.params;
-    props.navigation.setOptions({ title: name });
+
+    // Set the screen title to the user name entered in the start screen
+    useEffect(() => {
+        props.navigation.setOptions({ title: name });
+    }, [])
+
 
     return (
         <View style={[{ backgroundColor: color }, styles.container]}>
