@@ -36,6 +36,9 @@ I use **Expo** as development environment to develop and test the app.
 
 I use the **React Navigation** third party library to navigate between screens.
 
+### What challenges did I face, what did I learn?
+* The React Native Button component only supports a minimal level of customization. To customize buttons, use Pressable or Touchable components.
+
 
 ## Development Process for the chat application
 ### Set up Expo as Development Environment
