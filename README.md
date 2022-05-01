@@ -36,6 +36,12 @@ I use **Expo** as development environment to develop and test the app.
 
 I use the **React Navigation** third party library to navigate between screens.
 
+I use the React Native **Gifted Chat** library to create the UI of my chat app. The library has good GitHub statistics and is well documented. Further, it already provides predefined components for integral parts of the chat app:
+* Message bubbles
+* A message input field
+* A send button
+* Options for displaying user names and avatars
+
 ### What challenges did I face, what did I learn?
 * The React Native Button component only supports a minimal level of customization. To customize buttons, use Pressable or Touchable components.
 
@@ -77,5 +83,5 @@ expo install react-native-reanimated react-native-gesture-handler react-native-s
 export ANDROID_SDK=/Users/myuser/Library/Android/sdk
 export PATH=/Users/myuser/Library/Android/sdk/platform-tools:$PATH
 ```
-4. Create virtual device and click play to start
+4. Create virtual device (via more actions > Virtual Device Manager) and click play to start
 5. Select 'Run app on Android' in Expo to run app on virtual device

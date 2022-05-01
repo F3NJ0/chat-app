@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity, ImageBackground, Platform, KeyboardAvoidingView } from 'react-native';
 import BackgroundImage from '../img/Background_Image.png';
 
 // Create constant that holds background colors for Chat Screen
@@ -78,6 +78,7 @@ export default function Start(props) {
           </Pressable>
         </View>
       </ImageBackground>
+      {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
     </View>
   )
 }
