@@ -42,8 +42,17 @@ I use the React Native **Gifted Chat** library to create the UI of my chat app. 
 * A send button
 * Options for displaying user names and avatars
 
+I'm working with **WebSocket** as a real-time application technology as it fulfills the following requirements of my chat application:
+* Transmitting in- and outgoing data immediately
+* Two-way communication between clients and server
+* Avoids data bloat compared to long polling
+
+I use **Cloud Firestore** as data storage platform for this application. real-time data
+
 ### What challenges did I face, what did I learn?
 * The React Native Button component only supports a minimal level of customization. To customize buttons, use Pressable or Touchable components.
+
+* There is a new Firestore version v9 available which differs greatly from v7 used in the CF examples. I decided to use v9 in this application, relying on the Firebase documentation.
 
 
 ## Development Process for the chat application
@@ -85,3 +94,43 @@ export PATH=/Users/myuser/Library/Android/sdk/platform-tools:$PATH
 ```
 4. Create virtual device (via more actions > Virtual Device Manager) and click play to start
 5. Select 'Run app on Android' in Expo to run app on virtual device
+6. Press Command + Shift + R to start a screen recording.
+
+### Integreat Gifted Chat library to create chat UI
+1. Install Gifted Chat
+```bash
+npm install react-native-gifted-chat
+```
+
+2. Integrate Gifted Chat into application
+```bash
+import { GiftedChat } from 'react-native-gifted-chat';
+```
+
+3. Follow instructions to set up chat: https://github.com/FaridSafi/react-native-gifted-chat 
+
+### Set up Cloud Firestore as data storage platform
+1. Install Firestore via Firebase
+```bash
+npm install firebase
+```
+
+2. Import Firestore in application (e.g, in Chat.js)
+```bash
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+```
+
+3. Register App in Firebase settings
+
+4. Copy config code to application
+
+5. Initialize app
+```bash
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
+```
+
+6. Set up anonymous authentication in firebase console
