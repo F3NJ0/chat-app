@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { StyleSheet, View, Platform, KeyboardAvoidingView, Text } from 'react-native';
 
-
 import { collection, onSnapshot, addDoc, query, orderBy } from "firebase/firestore";
 
 import { auth, db } from '../config/firebase';
@@ -11,23 +10,26 @@ import { auth, db } from '../config/firebase';
 
 
 export default function Chat(props) {
+  // Retrieving the name and color properties passed from the Start Screen
   let { name, color } = props.route.params;
 
   // State to hold messages
   const [messages, setMessages] = useState([]);
 
-
-  // Create reference to the shopping list collection on firestore
+  // Create reference to the messages collection on firestore
   const messagesRef = collection(db, 'messages');
 
-  // Set the screen title to the user name entered in the start screen
   useEffect(() => {
+    // Set the screen title to the user name entered in the start screen
     props.navigation.setOptions({ title: name });
+
+    // Create a query to the messages collection, retrieving all messages sorted by their date of creation
     const messagesQuery = query(messagesRef, orderBy("createdAt", "desc"));
 
+    // onSnapshot returns an unsubscriber, listening for updates to the messages collection
     const unsubscribe = onSnapshot(messagesQuery, onCollectionUpdate);
 
-
+    // unsubsribe snapshot listener on unmount
     return () => unsubscribe();
   }, []);
 
@@ -42,13 +44,14 @@ export default function Chat(props) {
     });
   }
 
-  // Appending the created message to the messages state, then calling addMessage to add to Firestore
+  // Create custom onSend function, appending the newly created message to the messages state, 
+  // then calling addMessage to add to Firestore
   const onSend = useCallback((messages = []) => {
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
     addMessage(messages[0]);
   }, [])
 
-  // Reading snapshot data for messages collection, adding messages to messages state
+  // Reading snapshot data of messages collection, adding messages to messages state
   const onCollectionUpdate = (querySnapshot) => {
     setMessages(
       querySnapshot.docs.map(doc => ({
@@ -76,6 +79,7 @@ export default function Chat(props) {
 
 
   return (
+    // Setting the background color to the color picked by the user in the start screen
     <View
       style={[{ backgroundColor: color }, styles.container]}
     >
@@ -84,6 +88,7 @@ export default function Chat(props) {
         messages={messages}
         showAvatarForEveryMessage={true}
         onSend={messages => onSend(messages)}
+        // Add user data to message, using name provided in start screen and uid from auth object
         user={{
           _id: auth?.currentUser?.uid,
           name: name,

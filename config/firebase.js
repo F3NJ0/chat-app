@@ -15,8 +15,11 @@ const firebaseConfig = {
     databaseURL: Constants.manifest.extra.databaseURL
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Cloud Firestore and get a reference to the service
+// Initialize Cloud Firestore and get a reference to the service (db)
 export const db = getFirestore(app);
+
+// Get a reference to the Firebase auth object
 export const auth = getAuth();

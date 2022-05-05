@@ -17,14 +17,14 @@ export default function Start(props) {
   let [name, setName] = useState();
   let [color, setColor] = useState();
 
+  // Authenticate the user via Firebase and then redirect to the chat screen, passing the name and color props
   const onHandleStart = () => {
-    if (!auth?.currentUser?.uid) {
-      signInAnonymously(auth)
-        .then(() => console.log('Login success'))
-        .catch(err => console.log(`Login err: ${err}`));
-    }
-
-    props.navigation.navigate('Chat', { name: name, color: color })
+    signInAnonymously(auth)
+      .then(() => {
+        console.log('Login success');
+        props.navigation.navigate('Chat', { name: name, color: color });
+      })
+      .catch(err => console.log(`Login err: ${err}`));
   }
 
 
@@ -69,7 +69,7 @@ export default function Start(props) {
             />
           </View>
 
-          {/* Open chatroom, passing user name and background color as props */}
+          {/* Authenticate user & Open chatroom, passing user name and background color as props */}
           <Pressable
             onPress={onHandleStart}
             style={({ pressed }) => [

@@ -18,8 +18,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 // Create the navigator
 const Stack = createStackNavigator();
 
+// Create a contect for the user data
 const AuthenticatedUserContext = createContext({});
 
+// Create a Provider function to allow screen components to acces the current user
 const AuthenticatedUserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
@@ -35,6 +37,7 @@ function RootNavigator() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // onAuthStateChanges returns an unsubscriber
     const unsubscribeAuth = onAuthStateChanged(
       auth,
       async authenticatedUser => {

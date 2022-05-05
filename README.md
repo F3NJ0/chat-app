@@ -54,6 +54,8 @@ I use **Cloud Firestore** as data storage platform for this application. real-ti
 
 * There is a new Firestore version v9 available which differs greatly from v7 used in the CF examples. I decided to use v9 in this application, relying on the Firebase documentation.
 
+* Using functional components instead of class components, handling the onAuthStateChanged and signInAnonymously functions from Firebase within the useEffect() Hook of the Chat.js component resulted in issues with the user creation. When trying to send a message, the user object was still empty, leading to an error in the addDoc() function. Therefore, I have decided to move the user sign up (signInAnonymously) to the Start.js component and the onAuthStateChanged into the App.js component. This ensures that a user can only access the Chat screen and thus send messages when they are successfully authenticated. (See also this blog post for further details: https://blog.jscrambler.com/build-a-chat-app-with-firebase-and-react-native )
+
 
 ## Development Process for the chat application
 ### Set up Expo as Development Environment
