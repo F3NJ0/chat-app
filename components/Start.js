@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity, ImageBackground, Platform, KeyboardAvoidingView } from 'react-native';
 import BackgroundImage from '../img/Background_Image.png';
+
+import { signInAnonymously } from "firebase/auth";
+import { auth } from '../config/firebase';
 
 // Create constant that holds background colors for Chat Screen
 const colors = {
@@ -14,11 +17,15 @@ export default function Start(props) {
   let [name, setName] = useState();
   let [color, setColor] = useState();
 
-  // Setting default name and background color
-  // useEffect(() => {
-  //   setName('Your name...');
-  //   setColor(colors.black);
-  // }, [])
+  const onHandleStart = () => {
+    if (!auth?.currentUser?.uid) {
+      signInAnonymously(auth)
+        .then(() => console.log('Login success'))
+        .catch(err => console.log(`Login err: ${err}`));
+    }
+
+    props.navigation.navigate('Chat', { name: name, color: color })
+  }
 
 
   return (
@@ -64,7 +71,7 @@ export default function Start(props) {
 
           {/* Open chatroom, passing user name and background color as props */}
           <Pressable
-            onPress={() => props.navigation.navigate('Chat', { name: name, color: color })}
+            onPress={onHandleStart}
             style={({ pressed }) => [
               {
                 backgroundColor: pressed
