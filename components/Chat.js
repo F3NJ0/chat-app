@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import { StyleSheet, View, Platform, KeyboardAvoidingView, Text } from 'react-native';
 
 import { collection, onSnapshot, addDoc, query, orderBy } from "firebase/firestore";
 
 import { auth, db } from '../config/firebase';
 
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 
 export default function Chat(props) {
@@ -16,22 +17,82 @@ export default function Chat(props) {
   // State to hold messages
   const [messages, setMessages] = useState([]);
 
+  // State to hold information if user is offline or online
+  const [isConnected, setIsConnected] = useState();
+
   // Create reference to the messages collection on firestore
   const messagesRef = collection(db, 'messages');
+
+  // OFFLINE: Create functions to display messages when user is offline
+  // 1. Save messages to async storage
+  const saveMessages = async () => {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(messages));
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  // 2. Retrieve messages from async storage
+  const getMessages = async () => {
+    let messages = '';
+    try {
+      messages = await AsyncStorage.getItem('messages') || [];
+      setMessages(JSON.parse(messages));
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  // 3. Delete messages from async storage (for development purposes only)
+  const deleteMessages = async () => {
+    try {
+      await AsyncStorage.removeItem('messages');
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
 
   useEffect(() => {
     // Set the screen title to the user name entered in the start screen
     props.navigation.setOptions({ title: name });
 
-    // Create a query to the messages collection, retrieving all messages sorted by their date of creation
-    const messagesQuery = query(messagesRef, orderBy("createdAt", "desc"));
+    // Create variable to hold unsubsriber
+    let unsubscribe;
 
-    // onSnapshot returns an unsubscriber, listening for updates to the messages collection
-    const unsubscribe = onSnapshot(messagesQuery, onCollectionUpdate);
+    // Check if user is offline or online using NetInfo
+    NetInfo.fetch().then(connection => {
+      if (connection.isConnected) {
+        setIsConnected(true);
+      } else {
+        setIsConnected(false);
+      }
+    });
 
-    // unsubsribe snapshot listener on unmount
-    return () => unsubscribe();
-  }, []);
+    // If user is online, retrieve messages from firebase store, if offline use AsyncStorage
+    if (isConnected) {
+      // Create a query to the messages collection, retrieving all messages sorted by their date of creation
+      const messagesQuery = query(messagesRef, orderBy("createdAt", "desc"));
+
+      // onSnapshot returns an unsubscriber, listening for updates to the messages collection
+      unsubscribe = onSnapshot(messagesQuery, onCollectionUpdate);
+
+      // Delete previously saved messages in asyncStorage
+      deleteMessages();
+      // Save messages to asyncStorage
+      saveMessages();
+
+      // unsubsribe snapshot listener on unmount
+      return () => unsubscribe();
+    }
+    else {
+      // Load messages from asyncStorage
+      getMessages();
+    }
+  }, [isConnected]);
 
 
   // Add the last message of the messages state to the Firestore messages collection
@@ -77,6 +138,21 @@ export default function Chat(props) {
     )
   }
 
+  // Hide input bar if user is online so that they cannot create or send messages
+  const renderInputToolbar = (props) => {
+    if (!isConnected) {
+      // Hide Toolbar
+    }
+    else {
+      // Display Toolbar
+      return (
+        <InputToolbar
+          {...props}
+        />
+      );
+    }
+  }
+
 
   return (
     // Setting the background color to the color picked by the user in the start screen
@@ -85,6 +161,7 @@ export default function Chat(props) {
     >
       <GiftedChat
         renderBubble={renderBubble.bind()}
+        renderInputToolbar={renderInputToolbar.bind()}
         messages={messages}
         showAvatarForEveryMessage={true}
         onSend={messages => onSend(messages)}
