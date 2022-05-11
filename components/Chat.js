@@ -9,6 +9,8 @@ import { auth, db } from '../config/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
+import CustomActions from './CustomActions';
+
 
 export default function Chat(props) {
   // Retrieving the name and color properties passed from the Start Screen
@@ -153,6 +155,11 @@ export default function Chat(props) {
     }
   }
 
+  // Render the CustomActions component next to input bar to let user send images and geolocation
+  const renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
+  };
+
 
   return (
     // Setting the background color to the color picked by the user in the start screen
@@ -162,6 +169,7 @@ export default function Chat(props) {
       <GiftedChat
         renderBubble={renderBubble.bind()}
         renderInputToolbar={renderInputToolbar.bind()}
+        renderActions={renderCustomActions}
         messages={messages}
         showAvatarForEveryMessage={true}
         onSend={messages => onSend(messages)}

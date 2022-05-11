@@ -56,6 +56,10 @@ I use **Cloud Firestore** as data storage platform for this application. real-ti
 
 * Using functional components instead of class components, handling the onAuthStateChanged and signInAnonymously functions from Firebase within the useEffect() Hook of the Chat.js component resulted in issues with the user creation. When trying to send a message, the user object was still empty, leading to an error in the addDoc() function. Therefore, I have decided to move the user sign up (signInAnonymously) to the Start.js component and the onAuthStateChanged into the App.js component. This ensures that a user can only access the Chat screen and thus send messages when they are successfully authenticated. (See also this blog post for further details: https://blog.jscrambler.com/build-a-chat-app-with-firebase-and-react-native )
 
+* When using the useState hook in functional components, setting states don't have a callback. Therefore, to ensure that the newest state is used in other functions, they have to be included in the useEffect Hook (see this blog for further details: https://medium.com/@sanjeewafern/perform-an-immediate-action-after-setting-state-on-a-state-variable-with-react-functional-component-e9e1526f655a)
+
+* The expo-permissions library used by CF is depreated. Should use expo-media-library instead in future projects, see this documentation: https://docs.expo.dev/versions/latest/sdk/media-library/ 
+
 
 ## Development Process for the chat application
 ### Set up Expo as Development Environment
@@ -136,3 +140,16 @@ const db = getFirestore(app);
 ```
 
 6. Set up anonymous authentication in firebase console
+
+### Set up Async Storage for offline functionalities
+1. Install package
+```bash
+expo install @react-native-community/async-storage
+```
+
+2. Import AsyncStorage into app
+```bash
+import AsyncStorage from '@react-native-community/async-storage';
+```
+
+3. Store and retrieve state from Async Storage
