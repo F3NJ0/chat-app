@@ -60,6 +60,9 @@ I use **Cloud Firestore** as data storage platform for this application. real-ti
 
 * The expo-permissions library used by CF is depreated. Should use expo-media-library instead in future projects, see this documentation: https://docs.expo.dev/versions/latest/sdk/media-library/ 
 
+* When using Google Cloud Storage to store user images, it is necessary to set the 'write' permission to true in the rules tab, otherwise one cannot upload any images.
+
+* When accessing the download URL from Google Cloud Storage to display an image in the GiftedChat message, it is important to make sure that the onSend function is only called once the downloadURL was successfully retrieved --> Need to work with async/await
 
 ## Development Process for the chat application
 ### Set up Expo as Development Environment
@@ -152,4 +155,37 @@ expo install @react-native-community/async-storage
 import AsyncStorage from '@react-native-community/async-storage';
 ```
 
-3. Store and retrieve state from Async Storage
+3. Install NetInfo to detect if user is offline or online
+```bash
+expo install @react-native-community/netinfo
+```
+
+4. Import NetInfo into application
+```bash
+import NetInfo from '@react-native-community/netinfo';
+```
+
+5. Store and retrieve state from Async Storage
+
+### Integrate Communication Features
+1. Install necessary packages to ask for user permissions, access camera, and access location:
+```bash
+expo install expo-permissions
+expo install expo-image-picker
+expo install expo-location
+```
+2. Install package to display location within a Map:
+```bash
+expo install react-native-maps
+```
+
+3. Import packages into app
+
+### Set up Google Cloud Storage to store user images
+1. Go to Firebase console > Storage
+2. Click on Get Started to set cloud storage
+3. Check in .env file if storage bucket credentials are set correctly
+4. Create a reference to the storage in firebase.js
+```bash
+export const storage = getStorage(app);
+```
