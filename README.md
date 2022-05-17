@@ -42,12 +42,10 @@ I use the React Native **Gifted Chat** library to create the UI of my chat app. 
 * A send button
 * Options for displaying user names and avatars
 
-I'm working with **WebSocket** as a real-time application technology as it fulfills the following requirements of my chat application:
+I use **Cloud Firestore** as data storage platform for this application as it fulfills the following requirements of my chat application:
 * Transmitting in- and outgoing data immediately
 * Two-way communication between clients and server
 * Avoids data bloat compared to long polling
-
-I use **Cloud Firestore** as data storage platform for this application. real-time data
 
 ### What challenges did I face, what did I learn?
 * The React Native Button component only supports a minimal level of customization. To customize buttons, use Pressable or Touchable components.
@@ -58,7 +56,7 @@ I use **Cloud Firestore** as data storage platform for this application. real-ti
 
 * When using the useState hook in functional components, setting states don't have a callback. Therefore, to ensure that the newest state is used in other functions, they have to be included in the useEffect Hook (see this blog for further details: https://medium.com/@sanjeewafern/perform-an-immediate-action-after-setting-state-on-a-state-variable-with-react-functional-component-e9e1526f655a)
 
-* The expo-permissions library used by CF is depreated. Should use expo-media-library instead in future projects, see this documentation: https://docs.expo.dev/versions/latest/sdk/media-library/ 
+* The expo-permissions library used by CF is deprecated. Should use expo-media-library instead in future projects, see this documentation: https://docs.expo.dev/versions/latest/sdk/media-library/
 
 * When using Google Cloud Storage to store user images, it is necessary to set the 'write' permission to true in the rules tab, otherwise one cannot upload any images.
 
@@ -116,7 +114,7 @@ npm install react-native-gifted-chat
 import { GiftedChat } from 'react-native-gifted-chat';
 ```
 
-3. Follow instructions to set up chat: https://github.com/FaridSafi/react-native-gifted-chat 
+3. Follow instructions to set up chat: https://github.com/FaridSafi/react-native-gifted-chat
 
 ### Set up Cloud Firestore as data storage platform
 1. Install Firestore via Firebase
